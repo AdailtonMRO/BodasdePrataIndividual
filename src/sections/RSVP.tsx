@@ -10,7 +10,7 @@ export function RSVP() {
   const [isVisible, setIsVisible] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  
+
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -38,7 +38,7 @@ export function RSVP() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.name || !formData.attending) {
       toast.error('Por favor, preencha os campos obrigatórios');
       return;
@@ -47,7 +47,7 @@ export function RSVP() {
     setIsSubmitting(true);
 
     const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby1Nq8ojiaXHVjzPyLrQUP1A0s2rbjzoY-NyA9_OEBoonzrTGubbaHfDvhyria8zM_3Kg/exec';
-      
+
     try {
       const params = new URLSearchParams();
       params.append('name', formData.name);
@@ -58,7 +58,7 @@ export function RSVP() {
       params.append('guestName', '-');
       params.append('guestIdentity', '-');
       params.append('timestamp', new Date().toLocaleString('pt-BR'));
-      
+
       await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
@@ -73,14 +73,14 @@ export function RSVP() {
 
     } catch (error) {
       console.error('Erro ao enviar:', error);
-      
+
       const savedRSVPs = JSON.parse(localStorage.getItem('rsvps') || '[]');
       savedRSVPs.push({
         ...formData,
         timestamp: new Date().toISOString(),
       });
       localStorage.setItem('rsvps', JSON.stringify(savedRSVPs));
-      
+
       setIsSubmitted(true);
       toast.success('Presença confirmada! (Salvo offline)');
     } finally {
@@ -127,7 +127,7 @@ export function RSVP() {
           </div>
         </div>
 
-        <form 
+        <form
           onSubmit={handleSubmit}
           className={`bg-white p-8 md:p-12 shadow-elegant transition-all duration-700 delay-150 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
         >
@@ -178,7 +178,7 @@ export function RSVP() {
                 placeholder="Digite o número da sua identidade"
               />
 
-              <p className="text-sm text-gray-500 font-serif">
+              <p className="text-sm text-gray-500 font-serif font-bold text-dark-text">
                 Este dado é necessário para autorizar sua entrada na portaria do Alphaville.
               </p>
             </div>

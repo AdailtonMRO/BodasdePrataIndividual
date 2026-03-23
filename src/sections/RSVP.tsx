@@ -16,9 +16,6 @@ export function RSVP() {
     phone: '',
     identity: '',
     attending: '',
-    bringingGuest: '',
-    guestName: '',
-    guestIdentity: '',
   });
 
   useEffect(() => {
@@ -47,11 +44,6 @@ export function RSVP() {
       return;
     }
 
-    if (formData.attending === 'sim' && !formData.bringingGuest) {
-      toast.error('Por favor, informe se levará acompanhante');
-      return;
-    }
-
     setIsSubmitting(true);
 
     const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby1Nq8ojiaXHVjzPyLrQUP1A0s2rbjzoY-NyA9_OEBoonzrTGubbaHfDvhyria8zM_3Kg/exec';
@@ -62,9 +54,9 @@ export function RSVP() {
       params.append('phone', formData.phone);
       params.append('identity', formData.identity);
       params.append('attending', formData.attending === 'sim' ? 'Sim' : 'Não');
-      params.append('bringingGuest', formData.bringingGuest === 'sim' ? 'Sim' : 'Não');
-      params.append('guestName', formData.guestName || '-');
-      params.append('guestIdentity', formData.guestIdentity || '-');
+      params.append('bringingGuest', 'Não');
+      params.append('guestName', '-');
+      params.append('guestIdentity', '-');
       params.append('timestamp', new Date().toLocaleString('pt-BR'));
       
       await fetch(GOOGLE_SCRIPT_URL, {
@@ -211,71 +203,6 @@ export function RSVP() {
                 </div>
               </RadioGroup>
             </div>
-
-            {formData.attending === 'sim' && (
-              <div className="space-y-6 animate-fade-in">
-                <div className="space-y-3">
-                  <Label className="font-sans text-sm uppercase tracking-wider text-light-text flex items-center gap-2">
-                    <Users className="w-4 h-4" />
-                    Levará acompanhante? (máx. 1)
-                  </Label>
-                  <RadioGroup
-                    value={formData.bringingGuest}
-                    onValueChange={(value) => handleInputChange('bringingGuest', value)}
-                    className="flex gap-6"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="sim" id="guest-sim" className="border-champagne text-champagne" />
-                      <Label htmlFor="guest-sim" className="font-serif text-lg cursor-pointer">Sim</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="nao" id="guest-nao" className="border-champagne text-champagne" />
-                      <Label htmlFor="guest-nao" className="font-serif text-lg cursor-pointer">Não</Label>
-                    </div>
-                  </RadioGroup>
-                </div>
-
-               {formData.bringingGuest === 'sim' && (
-                <div className="space-y-6 animate-fade-in">
-
-                  <div className="space-y-2">
-                    <Label htmlFor="guestName" className="font-sans text-sm uppercase tracking-wider text-light-text">
-                      Nome do Acompanhante
-                    </Label>
-
-                    <Input
-                      id="guestName"
-                      type="text"
-                      value={formData.guestName}
-                      onChange={(e) => handleInputChange('guestName', e.target.value)}
-                      className="rounded-none border-gray-200 focus:border-champagne focus:ring-champagne font-serif text-lg py-6"
-                      placeholder="Nome completo do acompanhante"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="guestIdentity" className="font-sans text-sm uppercase tracking-wider text-light-text">
-                      Número da Identidade do Acompanhante
-                    </Label>
-
-                    <Input
-                      id="guestIdentity"
-                      type="text"
-                      value={formData.guestIdentity}
-                      onChange={(e) => handleInputChange('guestIdentity', e.target.value)}
-                      className="rounded-none border-gray-200 focus:border-champagne focus:ring-champagne font-serif text-lg py-6"
-                      placeholder="Documento do acompanhante"
-                    />
-
-                    <p className="text-sm text-gray-500 font-serif">
-                      Necessário para autorização de entrada na portaria do Alphaville.
-                    </p>
-                  </div>
-
-                </div>
-              )}
-              </div>
-            )}
 
             <Button
               type="submit"

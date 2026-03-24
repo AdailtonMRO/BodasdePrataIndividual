@@ -178,7 +178,7 @@ export function RSVP() {
                 placeholder="Digite o número da sua identidade"
               />
 
-              <p className="text-sm text-gray-500 font-serif font-bold text-dark-text">
+              <p className="text-sm text-dark-text font-serif font-bold text-dark-text">
                 Este dado é necessário para autorizar sua entrada na portaria do Alphaville.
               </p>
             </div>
